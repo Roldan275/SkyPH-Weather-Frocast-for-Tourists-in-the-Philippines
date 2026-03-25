@@ -1,186 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Sky PH</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register UI</title>
 
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
+    body {
+        height: 100vh;
+        background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center/cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        body {
-            margin: 0;
-            height: 100vh;
-            background: url("img/bgpics.jpg") no-repeat center center/cover fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;  
-        }
+    .overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(6px);
+        background: rgba(0,0,0,0.2);
+    }
 
-        body::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(2px);
-            z-index: 0;
-        }
+    .login-container {
+        position: relative;
+        background: rgba(255, 255, 255, 0.5);
+        padding: 30px;
+        border-radius: 12px;
+        width: 320px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
 
-        .form-container {
-            position: relative;
-            z-index: 1;
-            width: 420px;
-            padding: 35px 30px;
-            border-radius: 16px;
+    .close-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 28px;
+        height: 28px;
+        background: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 2;
+    }
+    .close-btn:hover {
+        background: #2176b6;
+    }
 
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+    h2 {
+        margin-bottom: 20px;
+        letter-spacing: 2px;
+    }
 
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-            text-align: center;
-        }
+    .input-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
 
-        .form-container::after {
-            content: "✕";
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 16px;
-            color: #7f8c8d;
-            cursor: pointer;
-        }
+    .input-group label {
+        font-size: 13px;
+        color: #333;
+    }
 
-        .form-container h2 {
-            font-size: 26px;
-            margin-bottom: 25px;
-            color: #2c3e50;
-            letter-spacing: 1px;
-        }
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-bottom: 2px solid #ccc;
+        background: transparent;
+        outline: none;
+    }
 
-        .input-group {
-            position: relative;
-            margin-bottom: 18px;
-        }
+    .input-group input:focus {
+        border-bottom: 2px solid #3498db;
+    }
 
-        .input-group input {
-            width: 100%;
-            padding: 14px 14px 14px 45px;
-            border-radius: 10px;
-            border: none;
+    .login-btn {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background: #3498db;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
 
-            background: #e9e9ee;
-            font-size: 15px;
-            color: #333;
+    .login-btn:hover {
+        background: #2980b9;
+    }
 
-            outline: none;
-            transition: 0.3s;
-        }
+    .signup {
+        margin-top: 15px;
+        font-size: 13px;
+    }
 
-        .input-group input:focus {
-            background: #ffffff;
-            box-shadow: 0 0 6px rgba(74, 144, 226, 0.4);
-        }
-
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #555;
-            font-size: 15px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            margin-top: 10px;
-
-            border: none;
-            border-radius: 10px;
-
-            background: #4a90e2;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 500;
-
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background: #357abd;
-        }
-
-        .login-text {
-            margin-top: 18px;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .login-text a {
-            color: #4a90e2;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .login-text a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 480px) {
-            .form-container {
-                width: 90%;
-                padding: 25px;
-            }
-        }
-    </style>
+    .signup a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+    }
+</style>
 </head>
 <body>
 
-    <div class="form-container">
-        <h2>REGISTER</h2>
+<div class="overlay"></div>
 
-        <form action="../Login WeatherForcast/login.html" method="GET">
+<div class="login-container">
+    <button class="close-btn" onclick="window.location.href='../Login WeatherForcast/login.html'">&times;</button>
+    <h2>REGISTER</h2>
 
-            <div class="input-group">
-                <i class="fa fa-user"></i>
-                <input type="text" name="name" placeholder="Name" required>
-            </div>
+    <form action="../Login WeatherForcast/login.html" method="GET">
 
-            <div class="input-group">
-                <i class="fa fa-envelope"></i>
-                <input type="email" name="email" placeholder="Email Address" required>
-            </div>
+        <div class="input-group">
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Enter your name" required>
+        </div>
 
-            <div class="input-group">
-                <i class="fa fa-lock"></i>
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Enter your email" required>
+        </div>
 
-            <div class="input-group">
-                <i class="fa fa-lock"></i>
-                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
-            </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
 
-            <button type="submit" class="btn">Sign Up</button>
+        <div class="input-group">
+            <label>Confirm Password</label>
+            <input type="password" name="confirm_password" placeholder="Confirm your password" required>
+        </div>
 
-        </form>
+        <button type="submit" class="login-btn">Sign Up</button>
 
-        <p class="login-text">
+        <div class="signup">
             Already have an account? <a href="../Login WeatherForcast/login.html">Login</a>
-        </p>
-    </div>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>
