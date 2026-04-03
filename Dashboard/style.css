@@ -1,0 +1,279 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: white;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 20;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.sidebar h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.menu-btn {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    background: #f1f1f1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.menu-btn:hover {
+    background: #7676f6;
+    color: white;
+}
+
+#logout {
+    background: #f26262;
+    color: white;
+}
+
+#logout:hover {
+    background: #b91c1c;
+}
+
+/* MAIN CONTENT */
+.main {
+    flex: 1;
+    padding: 20px;
+    margin-left: 220px;
+    transition: margin-left 0.3s ease;
+}
+
+.main.hidden-sidebar {
+    margin-left: 0;
+}
+
+/* TOPBAR */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* TOGGLE BUTTON */
+.toggle-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* LOGO */
+.logo img {
+    height: 50px;
+}
+
+/* TOPBAR SEARCH */
+.top-search {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#searchBar {
+    width: 350px;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+/* USER */
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Font Awesome user icon */
+.user-icon {
+    font-size: 1.6rem;        /* Larger but balanced with user text */
+    color: #2563eb;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.user-icon:hover {
+    color: #3b82f6;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+/* In case some style is overriding icon size */
+.user .fa-circle-user {
+    font-size: 1.6rem !important;
+    color: #2563eb !important;
+}
+
+.user .fa-circle-user:hover {
+    color: #3b82f6 !important;
+}
+
+
+/* WELCOME SECTION */
+.welcome {
+    background: #dbeafe;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.welcome span {
+    color: #2563eb;
+}
+
+/* EMPTY BOX */
+.empty-box {
+    background: #dbeafe;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* WELCOME SEARCH */
+.welcome-search {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.welcome-search input {
+    width: 100%;
+    max-width: 550px;
+    padding: 15px 25px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.welcome-search button {
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: none;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.welcome-search button:hover {
+    background: #2563eb;
+}
+
+/* CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.card-body h4 {
+    margin-bottom: 5px;
+}
+
+.card-body p {
+    font-size: 12px;
+    color: #555;
+}
+
+.card-body button {
+    margin-top: 8px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* RESPONSIVE SIDEBAR FOR MOBILE/TABLET */
+@media (max-width: 1024px) {
+    .main {
+        margin-left: 0;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+        position: fixed;
+        z-index: 30;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 768px) {
+    #searchBar {
+        width: 180px;
+    }
+    .welcome-search input {
+        width: 70%;
+    }
+}
+
+@media (max-width: 480px) {
+    #searchBar {
+        width: 140px;
+    }
+    .welcome-search input {
+        width: 80%;
+    }
+}
