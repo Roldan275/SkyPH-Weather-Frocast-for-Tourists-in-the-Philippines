@@ -4,12 +4,10 @@ body {
     background: #f4f6f9;
 }
 
-/* MAIN LAYOUT */
 .main {
     padding: 20px 40px;
 }
 
-/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
@@ -17,19 +15,30 @@ body {
     margin-bottom: 20px;
 }
 
+.search-wrapper {
+    position: relative;
+}
+
 .header input {
     width: 300px;
-    padding: 10px 15px;
+    padding: 10px 15px 10px 35px;
     border-radius: 20px;
     border: none;
     background: #eaecef;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
 }
 
 .user {
     font-weight: bold;
 }
 
-/* WELCOME BOX */
 .welcome {
     background: #dfeaf3;
     padding: 30px;
@@ -42,18 +51,53 @@ body {
 }
 
 .search-box {
-    margin-top: 15px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .search-box input {
     width: 400px;
-    padding: 12px;
-    border-radius: 20px;
+    padding: 12px 15px 12px 35px;
+    border-radius: 25px;
     border: none;
     background: #f1e6ec;
 }
 
-/* EMPTY STATE */
+/* DROPDOWN */
+.dropdown {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    margin-top: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.dropdown div {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.dropdown div:hover {
+    background: #f3f4f6;
+}
+
+.label {
+    font-size: 12px;
+    color: gray;
+    padding: 8px 15px;
+}
+
+.clear-btn {
+    text-align: center;
+    font-size: 12px;
+    color: red;
+    padding: 8px;
+}
+
+/* EMPTY */
 .empty {
     background: #cfddeb;
     padding: 40px;
@@ -83,17 +127,6 @@ body {
     margin-bottom: 10px;
 }
 
-.card h3 {
-    margin: 5px 0;
-}
-
-.weather {
-    display: block;
-    margin: 5px 0;
-    color: gray;
-}
-
-/* BUTTON */
 .card button {
     padding: 8px 12px;
     border: none;
@@ -101,40 +134,4 @@ body {
     background: #1e88e5;
     color: white;
     cursor: pointer;
-}
-
-.card button:hover {
-    background: #1565c0;
-}
-/* CENTER the welcome search */
-.search-box {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-/* SEARCH WRAPPER (prototype style) */
-.search-wrapper {
-    position: relative;
-    width: 400px;
-}
-/* INPUT STYLE IMPROVED */
-.search-wrapper input {
-    width: 100%;
-    padding: 12px 40px; /* space for icon */
-    border-radius: 25px;
-    border: none;
-    background: #f1e6ec;
-    outline: none;
-    font-size: 14px;
-}
-
-/* SEARCH ICON INSIDE INPUT */
-.search-icon {
-    position: absolute;
-    left: 945px;
-    top: 29%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    color: #888;
 }
