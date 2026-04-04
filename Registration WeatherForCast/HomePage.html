@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sky-PH</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+}
+
+/* NAVBAR */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2a7be4;
+}
+
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.login-btn {
+    padding: 6px 15px;
+    background: #2a7be4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+/* HERO */
+.hero {
+    height: 350px;
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center/cover;
+    position: relative;
+}
+
+.overlay {
+    background: rgba(0,0,0,0.4);
+    height: 100%;
+    color: white;
+    padding: 40px;
+}
+
+.overlay h1 {
+    font-size: 40px;
+}
+
+.overlay .sub {
+    margin-top: 10px;
+    max-width: 500px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.btn.white {
+    background: white;
+    color: black;
+}
+
+.btn.blue {
+    background: #2a7be4;
+    color: white;
+}
+
+/* ABOUT */
+.about {
+    padding: 40px;
+    text-align: center;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.card {
+    background: #e9edf3;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+}
+
+/* CONTACT */
+.contact {
+    padding: 40px;
+}
+
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.left {
+    width: 40%;
+}
+
+.form {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.form input,
+.form textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form button {
+    padding: 10px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 15px;
+    background: #ddd;
+    margin-top: 20px;
+}
+
+/* RESPONSIVE (bonus) */
+@media (max-width: 768px) {
+    .cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .contact-container {
+        flex-direction: column;
+    }
+
+    .left, .form {
+        width: 100%;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header>
+    <div class="logo">Sky-PH</div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <button class="login-btn">Login</button>
+    </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="overlay">
+        <h1>Sky-PH</h1>
+        <p>Weather Forecast for Tourist Spots</p>
+        <p class="sub">
+            Plan your perfect vacation in the Philippines. Search for tourist destinations and get accurate weather forecasts.
+        </p>
+
+        <div class="buttons">
+            <button class="btn white">LOGIN</button>
+            <button class="btn blue">REGISTER</button>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+    <h2>ABOUT</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Tourist Spots</h3>
+            <p>Discover amazing destinations across the Philippines.</p>
+        </div>
+
+        <div class="card">
+            <h3>Weather Forecast</h3>
+            <p>Get accurate 5-day weather predictions.</p>
+        </div>
+
+        <div class="card">
+            <h3>Easy Search</h3>
+            <p>Find your perfect destination quickly.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact">
+    <h2>CONTACT</h2>
+
+    <div class="contact-container">
+        <div class="left">
+            <h1>Sky-PH</h1>
+            <p>skyph@gmail.com</p>
+        </div>
+
+        <form class="form">
+            <input type="text" placeholder="Name">
+            <input type="text" placeholder="Surname">
+            <input type="email" placeholder="Email">
+            <textarea placeholder="Message"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Sky-PH. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
