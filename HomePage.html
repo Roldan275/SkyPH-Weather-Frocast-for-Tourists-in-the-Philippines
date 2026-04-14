@@ -33,12 +33,27 @@ header {
 }
 
 .logo {
+    position: relative;
     font-size: 24px;
     font-weight: 800;
+    padding-left: 48px;
     background: linear-gradient(135deg, #2a7be4, #1e5fc4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+.logo::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 40px;
+    background-image: url('Dashboard/image/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 nav a {
@@ -486,6 +501,32 @@ footer {
         font-size: 28px; /* Responsive bigger text */
     }
 }
+
+.contact-brand {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.contact-brand img {
+    width: 500px;
+    height: 500px;
+    object-fit: contain;
+    border-radius: 16px;
+    background: white;
+    padding: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.contact-brand h1 {
+    margin: 0;
+    font-size: 34px;
+}
+
+.contact-brand p {
+    margin: 4px 0 0;
+    font-size: 15px;
+}
 </style>
 
 </head>
@@ -577,8 +618,13 @@ footer {
 
     <div class="contact-container">
         <div class="left">
-            <h1>Sky-PH</h1>
-            <p>skyph@gmail.com</p>
+            <div class="contact-brand">
+                <img src="Dashboard/image/logo_skyph.png" alt="Sky-PH logo">
+                <div>
+                    <h1></h1>
+                    <p>skyph@gmail.com</p>
+                </div>
+            </div>
         </div>
 
         <form class="form">
