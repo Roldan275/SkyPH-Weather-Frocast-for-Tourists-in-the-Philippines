@@ -1,9 +1,8 @@
 <?php
 include 'db.php';
 
-/* =========================
-   FETCH FROM DATABASE
-========================= */
+include 'db.php';
+
 $touristSpots = [];
 
 if (isset($conn)) {
@@ -12,22 +11,22 @@ if (isset($conn)) {
 
     while ($row = $result->fetch_assoc()) {
         $location = $row['city'] . ', ' . $row['province'];
+        $fullAddress = $row['city'] . ', ' . $row['province'] . ', ' . $row['region'];
 
         $touristSpots[] = [
             'name' => $row['name'],
             'location' => $location,
+            'fullAddress' => $fullAddress,
             'region' => $row['region'],
             'province' => $row['province'],
             'city' => $row['city']
         ];
     }
-}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <title>Sky-PH Dashboard</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -36,113 +35,115 @@ if (isset($conn)) {
 
 <div class="main">
 
-    <!-- HEADER -->
-    <div class="header">
-        <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="hintSearch" placeholder="Search by region, province...">
-            <div id="hintDropdown" class="dropdown"></div>
-        </div>
-
-        <div class="user">👤 Roldan Abaloyan</div>
+<div class="header">
+    <div class="search-wrapper">
+        <input type="text" id="hintSearch" placeholder="Search by location...">
+        <div id="hintDropdown" class="dropdown"></div>
     </div>
+</div>
 
-    <!-- WELCOME -->
-    <div class="welcome">
-        <h2>Welcome To Sky-PH, <span>Roldan Abaloyan</span></h2>
-        <p>Search and check weather forecasts for your favorite tourist destinations</p>
+<div class="welcome">
+    <h2>Search Tourist Spots</h2>
 
-        <!-- TOURIST SEARCH -->
-        <div class="search-box">
-            <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="touristSearch" placeholder="Search tourist spot...">
-                <div id="touristDropdown" class="dropdown"></div>
-            </div>
-        </div>
+    <div class="search-wrapper">
+        <input type="text" id="touristSearch" placeholder="Search tourist spot...">
+        <div id="touristDropdown" class="dropdown"></div>
     </div>
+</div>
 
-    <!-- EMPTY -->
-    <div id="emptyState" class="empty">
-        ☀️ Select a tourist spot to view detailed weather forecast
-    </div>
+<div id="emptyState" class="empty">Select a tourist spot</div>
 
-    <!-- RESULTS -->
-    <div id="results" class="cards"></div>
+<div id="results" class="cards"></div>
+
+<!-- MAP (legacy, not used) -->
+<div id="mapContainer" style="display:none;"></div>
 
 </div>
 
+<!-- MODAL -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalAddress"></p>
+        <iframe id="modalMap"></iframe>
+        <div id="modalWeather"></div>
+    </div>
+</div>
+
 <script>
+const API_KEY = "YOUR_API_KEY_HERE"; // ← Replace with your OpenWeatherMap API Key
+
 const touristSpots = <?php echo json_encode($touristSpots); ?>;
 
-/* ELEMENTS */
 const touristInput = document.getElementById('touristSearch');
-const hintInput = document.getElementById('hintSearch');
-
 const touristDropdown = document.getElementById('touristDropdown');
-const hintDropdown = document.getElementById('hintDropdown');
-
 const resultsDiv = document.getElementById('results');
 const emptyState = document.getElementById('emptyState');
 
-let history = [];
+let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
-/* ================= TOURIST SEARCH ================= */
+/* INPUT */
 touristInput.addEventListener('input', () => {
     const query = touristInput.value.toLowerCase().trim();
     showTouristSuggestions(query);
     searchTourist(query);
 });
 
+/* SUGGESTIONS */
 function showTouristSuggestions(query) {
     touristDropdown.innerHTML = '';
-    if (!query) return;
+
+    if (!query && history.length > 0) {
+        touristDropdown.innerHTML += `<div class="label">Recent Searches</div>`;
+        history.forEach(itemText => {
+            const item = document.createElement('div');
+            item.textContent = itemText;
+            item.onclick = () => {
+                touristInput.value = itemText;
+                searchTourist(itemText.toLowerCase());
+                touristDropdown.innerHTML = '';
+            };
+            touristDropdown.appendChild(item);
+        });
+        touristDropdown.innerHTML += `<div class="clear-btn" onclick="clearHistory()">Clear History</div>`;
+        return;
+    }
 
     const matches = touristSpots.filter(spot =>
         spot.name.toLowerCase().includes(query) ||
         spot.location.toLowerCase().includes(query)
-    ).slice(0, 5);
-
-    if (matches.length === 0) return;
-
-    touristDropdown.innerHTML += `<div class="label">Tourist Spots</div>`;
+    ).slice(0,5);
 
     matches.forEach(spot => {
         const item = document.createElement('div');
-        item.innerHTML = `${spot.name} <small>(${spot.location})</small>`;
+        item.innerHTML = `
+            <strong>${spot.name}</strong><br>
+            <small>📍 ${spot.fullAddress}</small>
+        `;
 
         item.onclick = () => {
-            const value = spot.name.toLowerCase();
+            saveHistory(touristInput.value, spot.name);
             touristInput.value = spot.name;
-            searchTourist(value);
-            saveHistory(spot.name);
+            searchTourist(spot.name.toLowerCase());
             touristDropdown.innerHTML = '';
         };
 
         touristDropdown.appendChild(item);
     });
-
-    if (history.length > 0) {
-        touristDropdown.innerHTML += `<div class="clear-btn" onclick="clearHistory()">Clear History</div>`;
-    }
 }
 
+/* SEARCH */
 function searchTourist(query) {
     query = query.toLowerCase().trim();
+
     resultsDiv.innerHTML = '';
 
-    if (!query) {
-        emptyState.style.display = "block";
-        return;
-    }
-
     const filtered = touristSpots.filter(spot =>
-        spot.name.toLowerCase().includes(query) ||
-        spot.location.toLowerCase().includes(query)
+        spot.name.toLowerCase().includes(query)
     );
 
     if (filtered.length === 0) {
-        emptyState.innerHTML = `❌ No results for "<b>${query}</b>"`;
         emptyState.style.display = "block";
         return;
     }
@@ -156,107 +157,98 @@ function searchTourist(query) {
         card.innerHTML = `
             <div class="img"></div>
             <h3>${spot.name}</h3>
-            <p>📍 ${spot.location}</p>
-            <button onclick="viewForecast('${spot.name}')">View Forecast</button>
+            <p>📍 ${spot.fullAddress}</p>
+            <button onclick="viewPlace('${spot.name}','${spot.fullAddress}')">View Info</button>
+            <button onclick="viewForecast('${spot.name}','${spot.fullAddress}')">View Forecast</button>
         `;
 
         resultsDiv.appendChild(card);
     });
 }
 
-/* ================= HINT SEARCH (AUTO DETECT) ================= */
-hintInput.addEventListener('input', () => {
-    const query = hintInput.value.toLowerCase().trim();
-    hintDropdown.innerHTML = '';
+/* MODAL */
+function openModal() {
+    document.getElementById('modal').style.display = "flex";
+}
+function closeModal() {
+    document.getElementById('modal').style.display = "none";
+}
 
-    if (!query) return;
+/* VIEW INFO */
+function viewPlace(name, address) {
+    openModal();
 
-    let locations = [];
+    document.getElementById('modalTitle').innerText = name;
+    document.getElementById('modalAddress').innerText = address;
+    document.getElementById('modalWeather').innerHTML = "";
 
-    touristSpots.forEach(spot => {
-        if (spot.region) locations.push({ name: spot.region, type: 'Region' });
-        if (spot.province) locations.push({ name: spot.province, type: 'Province' });
-        if (spot.city) locations.push({ name: spot.city, type: 'City' });
-    });
+    const encoded = encodeURIComponent(address);
+    document.getElementById('modalMap').src =
+        `https://www.google.com/maps?q=${encoded}&output=embed`;
+}
 
-    const unique = [];
-    const seen = new Set();
+/* VIEW WEATHER (with real API) */
+function viewForecast(name, address) {
+    openModal();
 
-    locations.forEach(loc => {
-        const key = loc.name.toLowerCase();
-        if (!seen.has(key)) {
-            seen.add(key);
-            unique.push(loc);
+    document.getElementById('modalTitle').innerText = "Weather: " + name;
+    document.getElementById('modalAddress').innerText = address;
+    document.getElementById('modalMap').src = "";
+
+    fetchWeather(address);
+}
+
+function fetchWeather(address) {
+    const weatherDiv = document.getElementById('modalWeather');
+    weatherDiv.innerHTML = `<p>Loading weather...</p>`;
+
+    // Use city/region parts for query
+    const q = encodeURIComponent(address);
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${q}&units=metric&appid=${API_KEY}`)
+    .then(res => res.json())
+    .then(data => {
+        if(data.cod !== 200) {
+            weatherDiv.innerHTML = `<p>Weather not found for this location.</p>`;
+            return;
         }
-    });
 
-    const matches = unique.filter(loc =>
-        loc.name.toLowerCase().includes(query)
-    );
+        const temp = data.main.temp;
+        const desc = data.weather[0].description;
+        const icon = data.weather[0].icon;
+        const humidity = data.main.humidity;
+        const wind = data.wind.speed;
 
-    if (matches.length === 0) return;
-
-    hintDropdown.innerHTML += `<div class="label">Locations</div>`;
-
-    matches.slice(0, 6).forEach(loc => {
-        const item = document.createElement('div');
-        item.innerHTML = `${loc.name} <small>(${loc.type})</small>`;
-
-        item.onclick = () => {
-            hintInput.value = loc.name;
-
-            const filtered = touristSpots.filter(spot =>
-                (spot.region && spot.region.toLowerCase().includes(loc.name.toLowerCase())) ||
-                (spot.province && spot.province.toLowerCase().includes(loc.name.toLowerCase())) ||
-                (spot.city && spot.city.toLowerCase().includes(loc.name.toLowerCase()))
-            );
-
-            showHintResults(filtered, loc.name);
-            hintDropdown.innerHTML = '';
-        };
-
-        hintDropdown.appendChild(item);
-    });
-});
-
-function showHintResults(data, label) {
-    resultsDiv.innerHTML = '';
-
-    if (data.length === 0) {
-        emptyState.innerHTML = `❌ No places found in "<b>${label}</b>"`;
-        emptyState.style.display = "block";
-        return;
-    }
-
-    emptyState.style.display = "none";
-
-    data.forEach(spot => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-
-        card.innerHTML = `
-            <div class="img"></div>
-            <h3>${spot.name}</h3>
-            <p>📍 ${spot.location}</p>
-            <button onclick="viewForecast('${spot.name}')">View Forecast</button>
+        weatherDiv.innerHTML = `
+            <div class="weather-info">
+                <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${desc}">
+                <h3>${temp}°C</h3>
+                <p style="text-transform:capitalize;">${desc}</p>
+                <p>💧 Humidity: ${humidity}%</p>
+                <p>🌬 Wind: ${wind} m/s</p>
+            </div>
         `;
-
-        resultsDiv.appendChild(card);
+    })
+    .catch(err => {
+        weatherDiv.innerHTML = `<p>Error fetching weather.</p>`;
     });
 }
 
 /* HISTORY */
-function saveHistory(value) {
-    history.push(value);
+function saveHistory(typed, selected) {
+    const entry = typed + " → " + selected;
+
+    if (!history.includes(entry)) {
+        history.unshift(entry);
+        if (history.length > 5) history.pop();
+        localStorage.setItem('searchHistory', JSON.stringify(history));
+    }
 }
 
 function clearHistory() {
     history = [];
+    localStorage.removeItem('searchHistory');
     touristDropdown.innerHTML = '';
-}
-
-function viewForecast(name) {
-    alert("Showing forecast for: " + name);
 }
 </script>
 

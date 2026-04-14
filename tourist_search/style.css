@@ -1,3 +1,4 @@
+/* GENERAL */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -8,6 +9,7 @@ body {
     padding: 20px 40px;
 }
 
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
@@ -15,28 +17,29 @@ body {
     margin-bottom: 20px;
 }
 
+/* SEARCH WRAPPER */
 .search-wrapper {
     position: relative;
 }
 
+input {
+    outline: none;
+}
+
 .header input {
     width: 300px;
-    padding: 10px 15px 10px 35px;
+    padding: 10px 15px;
     border-radius: 20px;
     border: none;
     background: #eaecef;
 }
 
-.search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #888;
-}
-
-.user {
-    font-weight: bold;
+.welcome input {
+    width: 400px;
+    padding: 12px 15px;
+    border-radius: 25px;
+    border: none;
+    background: #f1e6ec;
 }
 
 .welcome {
@@ -46,23 +49,7 @@ body {
     margin-bottom: 20px;
 }
 
-.welcome h2 span {
-    color: #1e88e5;
-}
-
-.search-box {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.search-box input {
-    width: 400px;
-    padding: 12px 15px 12px 35px;
-    border-radius: 25px;
-    border: none;
-    background: #f1e6ec;
-}
+.welcome h2 { margin: 0; }
 
 /* DROPDOWN */
 .dropdown {
@@ -84,10 +71,17 @@ body {
     background: #f3f4f6;
 }
 
+.dropdown small {
+    display: block;
+    color: gray;
+    font-size: 11px;
+}
+
 .label {
     font-size: 12px;
     color: gray;
     padding: 8px 15px;
+    background: #fafafa;
 }
 
 .clear-btn {
@@ -95,15 +89,20 @@ body {
     font-size: 12px;
     color: red;
     padding: 8px;
+    cursor: pointer;
 }
 
-/* EMPTY */
+.clear-btn:hover {
+    background: #ffe5e5;
+}
+
 .empty {
     background: #cfddeb;
     padding: 40px;
     text-align: center;
     border-radius: 12px;
     margin-bottom: 20px;
+    color: #333;
 }
 
 /* CARDS */
@@ -118,6 +117,11 @@ body {
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
 }
 
 .card .img {
@@ -134,4 +138,78 @@ body {
     background: #1e88e5;
     color: white;
     cursor: pointer;
+    font-size: 13px;
+    margin-right: 5px;
+    transition: 0.2s;
+}
+
+.card button:hover {
+    background: #1565c0;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 700px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#modalMap {
+    width: 100%;
+    height: 300px;
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+/* WEATHER */
+#modalWeather {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.weather-info img {
+    width: 80px;
+    height: 80px;
+}
+
+.weather-info h3 {
+    margin: 5px 0;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
 }
