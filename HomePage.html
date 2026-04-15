@@ -452,6 +452,177 @@ footer {
     }
 }
 
+/* LOGIN/REGISTRATION MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.login-modal-container,
+.register-modal-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 30px;
+    border-radius: 24px;
+    width: 420px;
+    max-width: 90vw;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+    z-index: 1001;
+}
+
+.register-modal-container {
+    width: 450px;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #333;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 2;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.login-modal-container h2,
+.register-modal-container h2 {
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #2a7be4;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.modal-input-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.modal-input-group label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.modal-input-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #dfe3ea;
+    border-radius: 12px;
+    background: #f9fbff;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.modal-input-group input:focus {
+    border-color: #2a7be4;
+    box-shadow: 0 0 0 3px rgba(42, 123, 228, 0.1);
+    transform: translateY(-2px);
+    background: #fff;
+}
+
+.modal-login-btn,
+.modal-register-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2a7be4, #1e5fc4);
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(42, 123, 228, 0.3);
+}
+
+.modal-login-btn:hover,
+.modal-register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(42, 123, 228, 0.4);
+}
+
+.modal-options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.modal-options a {
+    text-decoration: none;
+    color: #2a7be4;
+}
+
+.modal-signup {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.modal-signup a {
+    color: #2a7be4;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.modal-signup a:hover {
+    color: #1e5fc4;
+}
+
+.modal-login-text {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.modal-login-text a {
+    color: #2a7be4;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.modal-login-text a:hover {
+    color: #1e5fc4;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     header {
@@ -561,34 +732,78 @@ footer {
     </div>
 </section>
 
-<div class="modal" id="loginModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Login</h3>
-            <button type="button" class="close-modal" data-close>&times;</button>
-        </div>
-        <form>
-            <input type="text" placeholder="Username or Email" required>
-            <input type="password" placeholder="Password" required>
-            <button type="submit">Sign In</button>
+<div class="modal-overlay" id="loginModal">
+    <div class="login-modal-container">
+        <button class="modal-close-btn" onclick="closeModal('loginModal')">&times;</button>
+        <h2>LOGIN</h2>
+
+        <form id="loginForm">
+            <div class="modal-input-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="modal-input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="modal-options">
+                <label><input type="checkbox"> Remember me</label>
+                <a href="#">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="modal-login-btn">Login</button>
+
+            <div class="modal-signup">
+                Don't have an account? <a href="#" onclick="switchToRegister()">Signup</a>
+            </div>
         </form>
-        <p class="alternate">Don't have an account? <a href="#" class="open-register">Register</a></p>
     </div>
 </div>
 
-<div class="modal" id="registerModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Register</h3>
-            <button type="button" class="close-modal" data-close>&times;</button>
-        </div>
-        <form>
-            <input type="text" placeholder="Full Name" required>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Password" required>
-            <button type="submit">Create Account</button>
+<div class="modal-overlay" id="registerModal">
+    <div class="register-modal-container">
+        <button class="modal-close-btn" onclick="closeModal('registerModal')">&times;</button>
+        <h2>REGISTER</h2>
+
+        <form id="registerForm">
+            <div class="modal-input-group">
+                <label>First Name</label>
+                <input type="text" name="first_name" placeholder="Enter your first name" required>
+            </div>
+
+            <div class="modal-input-group">
+                <label>Middle Name</label>
+                <input type="text" name="middle_name" placeholder="Enter your middle name">
+            </div>
+
+            <div class="modal-input-group">
+                <label>Last Name</label>
+                <input type="text" name="last_name" placeholder="Enter your last name" required>
+            </div>
+
+            <div class="modal-input-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="modal-input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="modal-input-group">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm_password" placeholder="Confirm your password" required>
+            </div>
+
+            <button type="submit" class="modal-register-btn">Sign Up</button>
+
+            <p class="modal-login-text">
+                Already have an Account? <a href="#" onclick="switchToLogin()">Login</a>
+            </p>
         </form>
-        <p class="alternate">Already have an account? <a href="#" class="open-login">Login</a></p>
     </div>
 </div>
 
@@ -644,51 +859,99 @@ footer {
 </footer>
 
 <script>
+    // Modal functionality
     const loginButtons = document.querySelectorAll('.open-login');
     const registerButtons = document.querySelectorAll('.open-register');
     const loginModal = document.getElementById('loginModal');
     const registerModal = document.getElementById('registerModal');
-    const closeButtons = document.querySelectorAll('.close-modal');
 
-    const openModal = (modal) => {
-        loginModal.classList.remove('active');
-        registerModal.classList.remove('active');
-        modal.classList.add('active');
-    };
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.add('active');
+    }
 
-    const closeModal = () => {
-        loginModal.classList.remove('active');
-        registerModal.classList.remove('active');
-    };
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
 
+    function switchToRegister() {
+        closeModal('loginModal');
+        openModal('registerModal');
+    }
+
+    function switchToLogin() {
+        closeModal('registerModal');
+        openModal('loginModal');
+    }
+
+    // Event listeners for opening modals
     loginButtons.forEach(btn => {
         btn.addEventListener('click', (event) => {
             event.preventDefault();
-            openModal(loginModal);
+            openModal('loginModal');
         });
     });
 
     registerButtons.forEach(btn => {
         btn.addEventListener('click', (event) => {
             event.preventDefault();
-            openModal(registerModal);
+            openModal('registerModal');
         });
     });
 
-    closeButtons.forEach(btn => btn.addEventListener('click', closeModal));
-
+    // Close modals when clicking outside
     [loginModal, registerModal].forEach(modal => {
         modal.addEventListener('click', (event) => {
             if (event.target === modal) {
-                closeModal();
+                modal.classList.remove('active');
             }
         });
     });
 
+    // Close on Escape key
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-            closeModal();
+            loginModal.classList.remove('active');
+            registerModal.classList.remove('active');
         }
+    });
+
+    // Form handling
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var email = this.email.value.trim();
+        var password = this.password.value.trim();
+
+        if (!email || !password) {
+            alert('Please enter email and password.');
+            return;
+        }
+
+        alert('Login successful. Redirecting to dashboard...');
+        // Here you would typically redirect to dashboard or handle login
+        window.location.href = 'Dashboard/index.php';
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var firstName = this.first_name.value.trim();
+        var lastName = this.last_name.value.trim();
+        var email = this.email.value.trim();
+        var password = this.password.value.trim();
+        var confirmPassword = this.confirm_password.value.trim();
+
+        if (!firstName || !lastName || !email || !password || !confirmPassword) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match.');
+            return;
+        }
+
+        alert('Registration successful. Please login.');
+        closeModal('registerModal');
+        openModal('loginModal');
     });
 </script>
 
