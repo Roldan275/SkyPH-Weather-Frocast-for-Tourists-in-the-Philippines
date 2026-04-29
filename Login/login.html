@@ -139,7 +139,7 @@
     <button class="close-btn" onclick="document.querySelector('.login-container').style.display='none'">&times;</button>
     <h2>LOGIN</h2>
 
-    <form id="loginForm" action="#" method="POST">
+    <form id="loginForm" action="login.php" method="POST">
         <div class="input-group">
             <label>Email</label>
             <input type="email" name="email" placeholder="Enter your email" required>
@@ -164,19 +164,16 @@
 
 <script>
     document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault();
         var email = this.email.value.trim();
         var password = this.password.value.trim();
 
         if (!email || !password) {
             alert('Please enter email and password.');
+            event.preventDefault();
             return;
         }
 
-        
-        alert('Login successful. Redirecting to homepage...');
-        
-        window.location.href = '../Registration WeatherForCast/Registration.html';
+        // Form will submit if validation passes
     });
 </script>
 

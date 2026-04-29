@@ -705,7 +705,6 @@ footer {
 </head>
 <body>
 
-<!-- NAVBAR -->
 <header>
     <div class="logo">Sky-PH</div>
     <nav>
@@ -716,7 +715,6 @@ footer {
     </nav>
 </header>
 
-<!-- HERO -->
 <section id="home" class="hero">
     <div class="overlay">
         <h1>Sky-PH</h1>
@@ -737,7 +735,7 @@ footer {
         <button class="modal-close-btn" onclick="closeModal('loginModal')">&times;</button>
         <h2>LOGIN</h2>
 
-        <form id="loginForm">
+        <form id="loginForm" action="Login/login.php" method="POST">
             <div class="modal-input-group">
                 <label>Email</label>
                 <input type="email" name="email" placeholder="Enter your email" required>
@@ -767,7 +765,7 @@ footer {
         <button class="modal-close-btn" onclick="closeModal('registerModal')">&times;</button>
         <h2>REGISTER</h2>
 
-        <form id="registerForm">
+        <form id="registerForm" action="Registration/registration.php" method="POST">
             <div class="modal-input-group">
                 <label>First Name</label>
                 <input type="text" name="first_name" placeholder="Enter your first name" required>
@@ -807,7 +805,6 @@ footer {
     </div>
 </div>
 
-<!-- ABOUT -->
 <section id="about" class="about">
     <h2>ABOUT</h2>
 
@@ -829,7 +826,6 @@ footer {
     </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact" class="contact">
     <h2>CONTACT</h2>
 
@@ -917,18 +913,14 @@ footer {
 
     // Form handling
     document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault();
         var email = this.email.value.trim();
         var password = this.password.value.trim();
 
         if (!email || !password) {
             alert('Please enter email and password.');
+            event.preventDefault();
             return;
         }
-
-        alert('Login successful. Redirecting to dashboard...');
-        // Here you would typically redirect to dashboard or handle login
-        window.location.href = 'Dashboard/index.php';
     });
 
     document.getElementById('registerForm').addEventListener('submit', function(event) {
@@ -949,9 +941,25 @@ footer {
             return;
         }
 
-        alert('Registration successful. Please login.');
-        closeModal('registerModal');
-        openModal('loginModal');
+        // Send data via AJAX
+        const formData = new FormData(this);
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                closeModal('registerModal');
+                openModal('loginModal');
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            alert('An error occurred: ' + error);
+        });
     });
 </script>
 
