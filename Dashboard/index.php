@@ -1,4 +1,33 @@
-<?php include 'db.php'; ?>
+<?php
+include 'db.php';
+
+// Assume user ID is 1 for now (in a real app, this would come from session)
+$user_id = 1;
+
+$sql_user = "SELECT * FROM users_table WHERE Id = $user_id";
+$result_user = $conn->query($sql_user);
+
+if ($result_user->num_rows > 0) {
+    $user = $result_user->fetch_assoc();
+    $user_name = $user['first_name'] . ' ' . $user['last_name'];
+    $user_profile = $user['first_name'] . ' ' . $user['middle_name'] . ' ' . $user['last_name'];
+    $user_email = $user['email'];
+    $user_phone = $user['phone'];
+} else {
+    $user_name = 'Guest';
+    $user_email = '';
+
+}
+
+$message = '';
+if (isset($_GET['update'])) {
+    if ($_GET['update'] == 'success') {
+        $message = '<p style="color: green; margin-bottom: 15px;">Profile updated successfully!</p>';
+    } elseif ($_GET['update'] == 'error') {
+        $message = '<p style="color: red; margin-bottom: 15px;">Error updating profile.</p>';
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,8 +41,7 @@
 <body>
 
 <div class="sidebar">
-    <h3>MENU</h3>
-    <button class="menu-btn">Dashboard</button>
+    <h3>DASHBOARD</h3>
     <button class="menu-btn">Search</button>
     <button class="menu-btn">Profile</button>
     <button class="menu-btn" id="logout">Log Out</button>
@@ -22,21 +50,20 @@
 <div class="main">
 
     <div class="topbar">
-        <button id="sidebar-toggle" class="toggle-btn">&#9776;</button>
+        <button class="toggle-btn" id="toggleBtn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
         <div class="logo">
             <img src="image/logo.png" alt="Sky-PH Logo">
         </div>
-        <div class="top-search">
-            <input type="text" id="searchBar" placeholder="Search tourist spot..." onkeyup="searchSpot()">
-        </div>
         <div class="user">
-            <span>Roldan Abaloyan</span>
-            <i class="fa-solid fa-circle-user user-icon"></i>
+            <span><?= $user_name; ?></span>
+            <i class="fa-solid fa-circle-user user-icon" id="profileIcon"></i>
         </div>
     </div>
 
     <div class="welcome">
-        <h2>Welcome To Sky-PH, <span>Roldan Abaloyan</span></h2>
+        <h2>Welcome To Sky-PH, <span><?= $user_name; ?></span></h2>
         <p>Search and check weather forecasts for your favorite tourist destinations</p>
         <div class="welcome-search">
             <input type="text" class="searchInput" placeholder="Search tourist spots...">
@@ -97,6 +124,35 @@
         echo "<p>No tourist spots found.</p>";
     endif;
     ?>
+    </div>
+    <!-- PROFILE POPUP -->
+    <div id="profilePopup" class="popup-overlay">
+
+    <div class="popup-card">
+
+        <div class="popup-header">
+            <h3>Profile</h3>
+            <span class="close-popup">&times;</span>
+        </div>
+
+        <div class="popup-avatar">
+            <i class="fa-solid fa-circle-user"></i>
+        </div>
+
+        <form action="update_profile.php" method="POST">
+
+            <label>Name</label>
+            <input type="text" name="name" value="<?= $user_profile; ?>">
+
+            <label>Email</label>
+            <input type="email" name="email" value="<?= $user_email; ?>">
+
+        </form>
+
+        <button class="logout-btn" onclick="window.location.href='logout.php'">
+            Log out
+        </button>
+
     </div>
 
 </div>

@@ -22,7 +22,7 @@ body {
     background: white;
     padding: 20px;
     border-right: 1px solid #ddd;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
     z-index: 20;
 }
 
@@ -36,21 +36,7 @@ body {
     color: #000;
 }
 
-.menu-btn {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    background: #f1f1f1;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-}
 
-.menu-btn:hover {
-    background: #7676f6;
-    color: white;
-}
 
 #logout {
     background: #f26262;
@@ -69,7 +55,7 @@ body {
     transition: margin-left 0.3s ease;
 }
 
-.main.hidden-sidebar {
+.main.sidebar-hidden {
     margin-left: 0;
 }
 
@@ -77,7 +63,8 @@ body {
 .topbar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 15px;
     background: white;
     padding: 10px 20px;
     border-radius: 10px;
@@ -90,6 +77,37 @@ body {
     border: none;
     font-size: 24px;
     cursor: pointer;
+    color: #2563eb;
+    padding: 8px 12px;
+    display: block;
+    transition: color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.toggle-btn:hover {
+    color: #3b82f6;
+}
+
+.toggle-btn i {
+    display: block;
+}
+
+/* MENU BUTTONS */
+.menu-btn {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f4f6f9;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.menu-btn:hover {
+    background: #3b82f6;
+    color: white;
 }
 
 /* LOGO */
@@ -97,18 +115,9 @@ body {
     height: 50px;
 }
 
-/* TOPBAR SEARCH */
-.top-search {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
-#searchBar {
-    width: 350px;
-    padding: 10px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
+/* LOGO FLEX SPACER */
+.logo {
+    margin-right: auto;
 }
 
 /* USER */
@@ -185,6 +194,11 @@ body {
     font-size: 14px;
 }
 
+.searchInput.highlighted {
+    border: 2px solid #2563eb !important;
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+}
+
 .welcome-search button {
     padding: 12px 20px;
     border-radius: 30px;
@@ -242,38 +256,128 @@ body {
     cursor: pointer;
 }
 
+
+
 /* RESPONSIVE SIDEBAR FOR MOBILE/TABLET */
 @media (max-width: 1024px) {
-    .main {
-        margin-left: 0;
-    }
-
     .sidebar {
         transform: translateX(-100%);
-        box-shadow: 2px 0 8px rgba(0,0,0,0.2);
-        position: fixed;
-        z-index: 30;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
     }
 
-    .sidebar.show {
-        transform: translateX(0);
+    .sidebar.hidden {
+        transform: translateX(-100%);
+    }
+
+    .main {
+        margin-left: 0 !important;
+    }
+
+    .main.sidebar-hidden {
+        margin-left: 0 !important;
     }
 }
 
 @media (max-width: 768px) {
-    #searchBar {
-        width: 180px;
-    }
     .welcome-search input {
         width: 70%;
     }
 }
 
 @media (max-width: 480px) {
-    #searchBar {
-        width: 140px;
-    }
     .welcome-search input {
         width: 80%;
     }
+}
+
+/* =========================
+   PROFILE POPUP (LIKE IMAGE)
+========================= */
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-card {
+    background: white;
+    width: 420px;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* HEADER */
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-popup {
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* AVATAR */
+.popup-avatar {
+    text-align: center;
+    font-size: 60px;
+    margin: 15px 0;
+    color: #2563eb;
+}
+
+/* FORM */
+.popup-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.popup-card input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* BUTTONS */
+.popup-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+
+
+
+
+.logout-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: #f26262;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
