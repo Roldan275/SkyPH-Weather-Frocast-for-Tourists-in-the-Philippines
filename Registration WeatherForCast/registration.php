@@ -1,6 +1,6 @@
 ```php
 <?php
-// SHOW ERRORS (for debugging only)
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
