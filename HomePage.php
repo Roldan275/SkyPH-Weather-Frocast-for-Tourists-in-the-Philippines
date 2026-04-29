@@ -509,7 +509,7 @@ footer {
 }
 
 .modal-close-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(248, 247, 247, 0.3);
     transform: scale(1.1);
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
@@ -531,7 +531,7 @@ footer {
 .modal-input-group label {
     display: block;
     font-size: 13px;
-    color: #666;
+    color: #ffffff;
     margin-bottom: 6px;
     font-weight: 500;
 }
@@ -581,7 +581,7 @@ footer {
     justify-content: space-between;
     font-size: 12px;
     margin-bottom: 15px;
-    color: #666;
+    color: #ffffff;
 }
 
 .modal-options a {
@@ -592,7 +592,7 @@ footer {
 .modal-signup {
     margin-top: 20px;
     font-size: 14px;
-    color: #666;
+    color: #ffffff;
 }
 
 .modal-signup a {
@@ -609,7 +609,7 @@ footer {
 .modal-login-text {
     margin-top: 20px;
     font-size: 14px;
-    color: #666;
+    color: #ffffff;
 }
 
 .modal-login-text a {
@@ -695,7 +695,7 @@ footer {
 .contact-brand p {
     margin: 0;
     font-size: 18px;
-    color: #333;
+    color: #ffffff;
     text-align: center;
     font-weight: 600;
     text-transform: lowercase;
