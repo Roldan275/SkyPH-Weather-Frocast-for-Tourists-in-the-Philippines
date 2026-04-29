@@ -20,6 +20,7 @@ if (isset($conn)) {
             'city' => $row['city']
         ];
     }
+}
 ?>
 
 <!DOCTYPE html>
