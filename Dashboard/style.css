@@ -524,6 +524,13 @@ body {
 .detail-item b { color: #1e293b; font-size: 1rem; display: block; margin-top: 4px; }
 
 /* --- RIGHT COLUMN: THE LARGE TABS --- */
+.forecast-container.has-data {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 25px;
+    align-items: start; /* This is important so the left card doesn't stretch */
+}
+
 .weather-right {
     background: white;
     border-radius: 30px;
@@ -531,6 +538,7 @@ body {
     border: 1px solid #f1f5f9;
     display: flex;
     flex-direction: column;
+    min-height: 100%; /* Allows it to expand with the map */
 }
 
 .forecast-tabs-wrapper {
