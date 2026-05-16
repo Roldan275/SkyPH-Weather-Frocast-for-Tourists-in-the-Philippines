@@ -1,31 +1,26 @@
 <?php
-include 'db.php';
+session_start();
 
-// Assume user ID is 1 for now (in a real app, this would come from session)
-$user_id = 1;
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../Login WeatherForcast/login.php");
+    exit();
+}
+
+include 'db.php';
+include_once "../api/weather_cache.php";
+
+$user_id = $_SESSION['user_id'];
 
 $sql_user = "SELECT * FROM users_table WHERE Id = $user_id";
 $result_user = $conn->query($sql_user);
 
-if ($result_user->num_rows > 0) {
+if ($result_user && $result_user->num_rows > 0) {
     $user = $result_user->fetch_assoc();
     $user_name = $user['first_name'] . ' ' . $user['last_name'];
-    $user_profile = $user['first_name'] . ' ' . $user['middle_name'] . ' ' . $user['last_name'];
     $user_email = $user['email'];
-    $user_phone = $user['phone'];
 } else {
-    $user_name = 'Guest';
-    $user_email = '';
-
-}
-
-$message = '';
-if (isset($_GET['update'])) {
-    if ($_GET['update'] == 'success') {
-        $message = '<p style="color: green; margin-bottom: 15px;">Profile updated successfully!</p>';
-    } elseif ($_GET['update'] == 'error') {
-        $message = '<p style="color: red; margin-bottom: 15px;">Error updating profile.</p>';
-    }
+    header("Location: logout.php");
+    exit();
 }
 ?>
 
@@ -33,130 +28,112 @@ if (isset($_GET['update'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sky-PH Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
-<div class="sidebar">
-    <h3>DASHBOARD</h3>
-    <button class="menu-btn">Search</button>
-    <button class="menu-btn">Profile</button>
-    <button class="menu-btn" id="logout">Log Out</button>
-</div>
-
-<div class="main">
-
-    <div class="topbar">
-        <button class="toggle-btn" id="toggleBtn">
-            <i class="fa-solid fa-bars"></i>
+    <nav class="sidebar">
+        <h3>DASHBOARD</h3>
+        <button id="sidebarSearch" class="menu-btn"><i class="fa fa-search"></i> Search</button>
+        <button id="sidebarProfile" class="menu-btn"><i class="fa fa-user"></i> Profile</button>
+        <button class="menu-btn" id="logout" onclick="window.location.href='logout.php'">
+            <i class="fa fa-sign-out-alt"></i> Log Out
         </button>
-        <div class="logo">
-            <img src="image/logo.png" alt="Sky-PH Logo">
-        </div>
-        <div class="user">
-            <span><?= $user_name; ?></span>
-            <i class="fa-solid fa-circle-user user-icon" id="profileIcon"></i>
-        </div>
-    </div>
+    </nav>
 
-    <div class="welcome">
-        <h2>Welcome To Sky-PH, <span><?= $user_name; ?></span></h2>
-        <p>Search and check weather forecasts for your favorite tourist destinations</p>
-        <div class="welcome-search">
-            <input type="text" class="searchInput" placeholder="Search tourist spots...">
-            <button>Search</button>
-        </div>
-    </div>
+    <main class="main">
+        <header class="topbar">
+            <button id="toggleBtn" class="toggle-btn">
+                <i class="fa fa-bars"></i>
+            </button>
 
-    <div class="empty-box">
-        Select a tourist spot to view detailed weather forecast
-    </div>
+            <div class="logo">
+                <img src="image/logo.png" alt="SkyPH Logo">
+            </div>
 
-    <h3>Featured Tourist Spots</h3>
+            <div class="user" id="profileIcon" style="cursor: pointer;">
+                <span><?= htmlspecialchars($user_name); ?></span>
+                <i class="fa-solid fa-circle-user"></i>
+            </div>
+        </header>
 
-    <div class="cards">
-    <?php
-    $sql = "
-    SELECT 
-        t.id,
-        t.name,
-        t.region,
-        t.province,
-        t.city,
-        t.image,
-        w.temperature,
-        w.weather_condition
-    FROM touristspots_table t
-    LEFT JOIN weather_forecasts w
-    ON t.id = w.tourist_spot_id
-    AND w.id = (
-        SELECT MAX(id)
-        FROM weather_forecasts
-        WHERE tourist_spot_id = t.id
-    )
-    ";
-    $result = $conn->query($sql);
+        <section class="welcome">
+            <h2>Welcome <span><?= htmlspecialchars($user_name); ?></span></h2>
+            <p>Plan your next adventure. Check real-time weather for the Philippines' top destinations.</p>
+            <div class="welcome-search">
+                <input type="text" class="searchInput" placeholder="Search tourist spots...">
+                <button id="searchBtn">Search</button>
+            </div>
+        </section>
 
-    if ($result->num_rows > 0):
-        while($row = $result->fetch_assoc()):
-            // Convert BLOB to Base64 for display
-            $imageSource = 'image/placeholder.png'; // Default if empty
-            if (!empty($row['image'])) {
-                $imageSource = 'data:image/jpeg;base64,' . base64_encode($row['image']);
-            }
-    ?>
-        <div class="card">
-            <img src="<?= $imageSource; ?>" alt="<?= $row['name']; ?>">
-            <div class="card-body">
-                <h4><?= $row['name']; ?></h4>
-                <p><?= $row['city']; ?>, <?= $row['province']; ?></p>
-                <p><?= $row['weather_condition'] ?? 'No data'; ?></p>
-                <p><?= $row['temperature'] ? $row['temperature'] . '°C' : ''; ?></p>
-                <button>View Forecast</button>
+        <section class="forecast-container" id="forecastBox">
+            <div class="empty-placeholder">
+                <i class="fa fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 15px; color: #cbd5e1;"></i>
+                <p>Select a destination below to view the 5-day forecast and location map.</p>
+            </div>
+        </section>
+
+        <section class="featured-section">
+            <h3>Featured Tourist Spots</h3>
+            <div class="cards">
+                <?php
+                $sql = "SELECT id, name, city, province, description, image, latitude, longitude FROM touristspots_table";
+                $result = $conn->query($sql);
+
+                if ($result && $result->num_rows > 0):
+                    while($row = $result->fetch_assoc()):
+                        $image = !empty($row['image']) ? 'data:image/jpeg;base64,' . base64_encode($row['image']) : 'image/placeholder.png';
+                ?>
+                    <article class="card">
+                        <img src="<?= $image; ?>" alt="<?= htmlspecialchars($row['name']); ?>">
+                        <div class="card-body">
+                            <h4><?= htmlspecialchars($row['name']); ?></h4>
+                            <p class="description"><?= htmlspecialchars($row['description']); ?></p>
+                            <p class="location-tag">
+                                <i class="fa fa-location-dot"></i> 
+                                <?= htmlspecialchars($row['city']); ?>, <?= htmlspecialchars($row['province']); ?>
+                            </p>
+                            <button class="viewForecastBtn"
+                                data-name="<?= htmlspecialchars($row['name']); ?>"
+                                data-city="<?= htmlspecialchars($row['city']); ?>"
+                                data-province="<?= htmlspecialchars($row['province']); ?>"
+                                data-lat="<?= $row['latitude']; ?>"
+                                data-lon="<?= $row['longitude']; ?>">
+                                View Forecast
+                            </button>
+                        </div>
+                    </article>
+                <?php endwhile; endif; ?>
+            </div>
+        </section>
+    </main>
+
+    <div id="profilePopup" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>User Profile</h3>
+                <span class="close-popup">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="profile-avatar">
+                    <i class="fa-solid fa-circle-user"></i>
+                </div>
+                <div class="profile-info">
+                    <p><strong>Name:</strong> <?= htmlspecialchars($user_name); ?></p>
+                    <p><strong>Email:</strong> <?= htmlspecialchars($user_email); ?></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn">Close</button>
             </div>
         </div>
-    <?php
-        endwhile;
-    else:
-        echo "<p>No tourist spots found.</p>";
-    endif;
-    ?>
-    </div>
-    <!-- PROFILE POPUP -->
-    <div id="profilePopup" class="popup-overlay">
-
-    <div class="popup-card">
-
-        <div class="popup-header">
-            <h3>Profile</h3>
-            <span class="close-popup">&times;</span>
-        </div>
-
-        <div class="popup-avatar">
-            <i class="fa-solid fa-circle-user"></i>
-        </div>
-
-        <form action="update_profile.php" method="POST">
-
-            <label>Name</label>
-            <input type="text" name="name" value="<?= $user_profile; ?>">
-
-            <label>Email</label>
-            <input type="email" name="email" value="<?= $user_email; ?>">
-
-        </form>
-
-        <button class="logout-btn" onclick="window.location.href='logout.php'">
-            Log out
-        </button>
-
     </div>
 
-</div>
-
-<script src="function.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="function.js"></script>
 </body>
 </html>

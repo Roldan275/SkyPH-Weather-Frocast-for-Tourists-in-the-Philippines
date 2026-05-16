@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user_id'])) {
+    header('Location: Dashboard/index.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -350,7 +357,7 @@ nav a:hover::after {
     text-align: center;
     font-size: 36px;
     margin-bottom: 10px;
-    color: #333;
+    color: #000000;
 }
 
 .contact-container {
@@ -372,7 +379,7 @@ nav a:hover::after {
 }
 
 .left p, .left a {
-    color: #666;
+    color: #000000;
     line-height: 1.8;
     margin-bottom: 15px;
     font-size: 8px; /* Smaller readable email */
@@ -509,7 +516,7 @@ footer {
 }
 
 .modal-close-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(248, 247, 247, 0.3);
     transform: scale(1.1);
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
@@ -531,7 +538,7 @@ footer {
 .modal-input-group label {
     display: block;
     font-size: 13px;
-    color: #666;
+    color: #ffffff;
     margin-bottom: 6px;
     font-weight: 500;
 }
@@ -581,7 +588,7 @@ footer {
     justify-content: space-between;
     font-size: 12px;
     margin-bottom: 15px;
-    color: #666;
+    color: #ffffff;
 }
 
 .modal-options a {
@@ -592,7 +599,7 @@ footer {
 .modal-signup {
     margin-top: 20px;
     font-size: 14px;
-    color: #666;
+    color: #ffffff;
 }
 
 .modal-signup a {
@@ -609,7 +616,7 @@ footer {
 .modal-login-text {
     margin-top: 20px;
     font-size: 14px;
-    color: #666;
+    color: #ffffff;
 }
 
 .modal-login-text a {
@@ -695,7 +702,7 @@ footer {
 .contact-brand p {
     margin: 0;
     font-size: 18px;
-    color: #333;
+    color: #ffffff;
     text-align: center;
     font-weight: 600;
     text-transform: lowercase;
@@ -746,10 +753,7 @@ footer {
                 <input type="password" name="password" placeholder="Enter your password" required>
             </div>
 
-            <div class="modal-options">
-                <label><input type="checkbox"> Remember me</label>
-                <a href="#">Forgot password?</a>
-            </div>
+        <input type="hidden" name="ajax" value="1">
 
             <button type="submit" class="modal-login-btn">Login</button>
 
@@ -832,7 +836,7 @@ footer {
     <div class="contact-container">
         <div class="left">
             <div class="contact-brand">
-                <img src="Dashboard/image/logo_skyph.png" alt="Sky-PH logo">
+                <img src="image/logo.png" alt="Sky-PH logo">
                 <div>
                     <h1></h1>
                     <p>skyph@gmail.com</p>
@@ -913,14 +917,35 @@ footer {
 
     // Form handling
     document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
         var email = this.email.value.trim();
         var password = this.password.value.trim();
 
-        if (!email || !password) {
+        if (!email || !password) {  
             alert('Please enter email and password.');
-            event.preventDefault();
             return;
         }
+
+        const formData = new FormData(this);
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = data.redirect || 'Dashboard/index.php';
+            } else {
+                alert(data.message || 'Login failed.');
+            }
+        })
+        .catch(error => {
+            alert('An error occurred while logging in: ' + error);
+        });
     });
 
     document.getElementById('registerForm').addEventListener('submit', function(event) {
