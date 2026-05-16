@@ -792,12 +792,12 @@ footer {
 
             <div class="modal-input-group">
                 <label>Password</label>
-                <input type="password" name="password" placeholder="Enter your password" required>
+                <input type="password" name="password" placeholder="Enter your password" required minlength="6" maxlength="9">
             </div>
 
             <div class="modal-input-group">
                 <label>Confirm Password</label>
-                <input type="password" name="confirm_password" placeholder="Confirm your password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm your password" required minlength="6" maxlength="9">
             </div>
 
             <button type="submit" class="modal-register-btn">Sign Up</button>
@@ -958,6 +958,11 @@ footer {
 
         if (!firstName || !lastName || !email || !password || !confirmPassword) {
             alert('Please fill in all required fields.');
+            return;
+        }
+
+        if (password.length < 6 || password.length > 9) {
+            alert('Password must be between 6 and 9 characters.');
             return;
         }
 

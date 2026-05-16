@@ -31,6 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
             echo json_encode(['success' => false, 'message' => 'Please fill in all fields.']);
         } 
+        elseif (strlen($password) < 6 || strlen($password) > 9) {
+            echo json_encode(['success' => false, 'message' => 'Password must be between 6 and 9 characters.']);
+        }
         elseif ($password !== $confirm_password) {
             echo json_encode(['success' => false, 'message' => 'Passwords do not match.']);
         } 
@@ -125,11 +128,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="input-group">
             <label>Password</label>
-            <input type="password" name="password" required>
+            <input type="password" name="password" required minlength="6" maxlength="9">
         </div>
         <div class="input-group">
             <label>Confirm Password</label>
-            <input type="password" name="confirm_password" required>
+            <input type="password" name="confirm_password" required minlength="6" maxlength="9">
         </div>
         <button type="submit" class="login-btn">Sign Up</button>
     </form>

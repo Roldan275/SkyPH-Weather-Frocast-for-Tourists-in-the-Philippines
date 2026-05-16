@@ -93,6 +93,7 @@ if ($result_user && $result_user->num_rows > 0) {
                         <div class="card-body">
                             <h4><?= htmlspecialchars($row['name']); ?></h4>
                             <p class="description"><?= htmlspecialchars($row['description']); ?></p>
+                            <br>
                             <p class="location-tag">
                                 <i class="fa fa-location-dot"></i> 
                                 <?= htmlspecialchars($row['city']); ?>, <?= htmlspecialchars($row['province']); ?>
