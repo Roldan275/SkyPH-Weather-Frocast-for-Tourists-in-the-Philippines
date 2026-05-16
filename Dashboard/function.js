@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Sidebar Search Button: Redirects focus to main search input
     if (sidebarSearchBtn && searchInput) {
         sidebarSearchBtn.addEventListener("click", () => {
             searchInput.focus();
@@ -66,11 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (profilePopup) profilePopup.style.display = "none";
     }
 
-    // Attach listeners to both Profile triggers
     if (profileIcon) profileIcon.addEventListener("click", openProfile);
     if (sidebarProfileBtn) sidebarProfileBtn.addEventListener("click", openProfile);
-    
-    // Close listeners
     if (closePopup) closePopup.addEventListener("click", closeProfile);
     if (cancelBtn) cancelBtn.addEventListener("click", closeProfile);
 
@@ -125,8 +121,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${renderDetailItem('fa-cloud-sun', 'Dew Point', (current.dew_point ?? 'N/A') + '°C')}
                 </div>
             </div>
-            <div class="weather-right">
+            <div class="weather-right" style="position: relative;">
+                
+                <div id="closeForecastBtn" style="position: absolute; right: 15px; top: 32px; cursor: pointer; z-index: 10; color: #94a3b8; font-size: 1.5rem; transition: 0.2s;">
+                    <i class="fa fa-times-circle"></i>
+                </div>
+
                 <h3>5-Day Forecast</h3>
+                
                 <div class="forecast-tabs-wrapper">
                     <div class="daily-tabs-internal">
                         ${list.map((d, i) => `
@@ -142,11 +144,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     <h4 style="margin-bottom: 10px; color: #64748b;">Location Map</h4>
                     <div id="map" style="width: 100%; height: 250px; border-radius: 20px; border: 1px solid #edf2f7; z-index: 1;"></div>
                 </div>
-                <div class="forecast-footer">
-                    <p><i class="fa fa-shield-alt"></i> SkyPH Tourism Verified Data</p>
-                </div>
             </div>
         `;
+
+        // RESET LOGIC
+        document.getElementById("closeForecastBtn").addEventListener("click", () => {
+            forecastBox.classList.remove("has-data");
+            forecastBox.style.display = "block";
+            forecastBox.innerHTML = `
+                <div class="empty-placeholder" style="text-align: center; padding: 40px; background: #e0eafd; border-radius: 12px; border: 1px solid #cbd5e1;">
+                    <i class="fa fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 15px; color: #cbd5e1;"></i>
+                    <p>Select a destination below to view the 5-day forecast and location map.</p>
+                </div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
         setTimeout(() => { initMap(location.lat, location.lon, location.name); }, 100);
 
