@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user_id'])) {
+    header('Location: Dashboard/index.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -350,7 +357,7 @@ nav a:hover::after {
     text-align: center;
     font-size: 36px;
     margin-bottom: 10px;
-    color: #333;
+    color: #000000;
 }
 
 .contact-container {
@@ -372,7 +379,7 @@ nav a:hover::after {
 }
 
 .left p, .left a {
-    color: #666;
+    color: #000000;
     line-height: 1.8;
     margin-bottom: 15px;
     font-size: 8px; /* Smaller readable email */
@@ -746,10 +753,7 @@ footer {
                 <input type="password" name="password" placeholder="Enter your password" required>
             </div>
 
-            <div class="modal-options">
-                <label><input type="checkbox"> Remember me</label>
-                <a href="#">Forgot password?</a>
-            </div>
+        <input type="hidden" name="ajax" value="1">
 
             <button type="submit" class="modal-login-btn">Login</button>
 
@@ -832,7 +836,7 @@ footer {
     <div class="contact-container">
         <div class="left">
             <div class="contact-brand">
-                <img src="Dashboard/image/logo_skyph.png" alt="Sky-PH logo">
+                <img src="image/logo.png" alt="Sky-PH logo">
                 <div>
                     <h1></h1>
                     <p>skyph@gmail.com</p>
@@ -913,14 +917,35 @@ footer {
 
     // Form handling
     document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
         var email = this.email.value.trim();
         var password = this.password.value.trim();
 
-        if (!email || !password) {
+        if (!email || !password) {  
             alert('Please enter email and password.');
-            event.preventDefault();
             return;
         }
+
+        const formData = new FormData(this);
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = data.redirect || 'Dashboard/index.php';
+            } else {
+                alert(data.message || 'Login failed.');
+            }
+        })
+        .catch(error => {
+            alert('An error occurred while logging in: ' + error);
+        });
     });
 
     document.getElementById('registerForm').addEventListener('submit', function(event) {
