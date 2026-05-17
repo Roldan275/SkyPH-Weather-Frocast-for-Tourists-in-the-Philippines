@@ -41,11 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
         sidebarSearchBtn.addEventListener("click", () => {
             searchInput.focus();
             searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+            searchInput.classList.add("highlighted");
         });
     }
 
     if (searchInput) {
         searchInput.addEventListener("keyup", handleSearch);
+        searchInput.addEventListener("blur", () => {
+            searchInput.classList.remove("highlighted");
+        });
     }
 
     /* =========================
