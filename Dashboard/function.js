@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* =========================
-        SEARCH FUNCTIONALITY
+        SEARCH FUNCTIONALITY (WITH RED GLOW INTEGRATION)
     ========================= */
     const searchInput = document.querySelector(".searchInput");
     const sidebarSearchBtn = document.querySelectorAll(".menu-btn")[0]; // First button in sidebar
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             card.style.display =
                 (name.includes(value) || location.includes(value))
-                    ? "block"
+                    ? "flex" /* Maintained flex state to protect button layouts */
                     : "none";
         });
     }
@@ -41,14 +41,21 @@ document.addEventListener("DOMContentLoaded", () => {
         sidebarSearchBtn.addEventListener("click", () => {
             searchInput.focus();
             searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
-            searchInput.classList.add("highlighted");
+            
+            // Added the active red glowing animation class
+            searchInput.classList.add("highlighted-glow");
+
+            // Automatically clears out the glow after 2.5 seconds
+            setTimeout(() => {
+                searchInput.classList.remove("highlighted-glow");
+            }, 2500);
         });
     }
 
     if (searchInput) {
         searchInput.addEventListener("keyup", handleSearch);
         searchInput.addEventListener("blur", () => {
-            searchInput.classList.remove("highlighted");
+            searchInput.classList.remove("highlighted-glow");
         });
     }
 

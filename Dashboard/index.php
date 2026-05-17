@@ -89,33 +89,93 @@ if ($result_user && $result_user->num_rows > 0) {
         $sql = "SELECT id, name, city, province, description, image, latitude, longitude FROM touristspots_table";
         $result = $conn->query($sql);
 
-                if ($result && $result->num_rows > 0):
-                    while($row = $result->fetch_assoc()):
-                        $image = !empty($row['image']) ? 'data:image/jpeg;base64,' . base64_encode($row['image']) : 'image/placeholder.png';
-                ?>
-                    <article class="card">
-                        <img src="<?= $image; ?>" alt="<?= htmlspecialchars($row['name']); ?>">
-                        <div class="card-body">
-                            <h4><?= htmlspecialchars($row['name']); ?></h4>
-                            <p class="description"><?= htmlspecialchars($row['description']); ?></p>
-                            <p class="location-tag">
-                                <i class="fa fa-location-dot"></i> 
-                                <?= htmlspecialchars($row['city']); ?>, <?= htmlspecialchars($row['province']); ?>
-                            </p>
-                            <button class="viewForecastBtn"
-                                data-name="<?= htmlspecialchars($row['name']); ?>"
-                                data-city="<?= htmlspecialchars($row['city']); ?>"
-                                data-province="<?= htmlspecialchars($row['province']); ?>"
-                                data-lat="<?= $row['latitude']; ?>"
-                                data-lon="<?= $row['longitude']; ?>">
-                                View Forecast
-                            </button>
-                        </div>
-                    </article>
-                <?php endwhile; endif; ?>
+        if ($result && $result->num_rows > 0):
+            while($row = $result->fetch_assoc()):
+                $image = !empty($row['image']) ? 'data:image/jpeg;base64,' . base64_encode($row['image']) : 'image/placeholder.png';
+        ?>
+        <article class="card">
+            <img src="<?= $image; ?>">
+            <div class="card-body">
+                <h4><?= htmlspecialchars($row['name']); ?></h4>
+                <p><?= htmlspecialchars($row['description']); ?></p>
+                <p><i class="fa fa-location-dot"></i> <?= $row['city']; ?>, <?= $row['province']; ?></p>
+
+                <button class="viewForecastBtn"
+                    data-name="<?= $row['name']; ?>"
+                    data-city="<?= $row['city']; ?>"
+                    data-province="<?= $row['province']; ?>"
+                    data-lat="<?= $row['latitude']; ?>"
+                    data-lon="<?= $row['longitude']; ?>">
+                    View Forecast
+                </button>
             </div>
-        </section>
-    </main>
+        </article>
+        <?php endwhile; endif; ?>
+    </div>
+</section>
+
+<footer class="agrirain-footer">
+    <div class="footer-grid-wrapper">
+        
+        <div class="footer-meta-col">
+            <div class="brand-identity-header">
+                <img src="image/leyteUns.png" alt="LNU Logo" class="brand-logo-img" onerror="this.style.display='none'">
+                <span class="brand-title-text">Leyte Normal University</span>
+            </div>
+            <div class="contact-details-list">
+                <p><i class="fa-solid fa-location-dot"></i> Paterno St., Tacloban City,<br>Philippines, 6500</p>
+                <p><i class="fa-solid fa-link"></i> <a href="https://lnu.edu.ph" target="_blank" class="footer-anchor-link link-green">lnu.edu.ph</a></p>
+                <p><i class="fa-solid fa-phone"></i> (053) 528-7000</p>
+                <p><i class="fa-solid fa-envelope"></i> <a href="mailto:skyph@gmail.com" class="footer-anchor-link">skyph@gmail.com</a></p>
+            </div>
+        </div>
+
+        <div class="footer-meta-col">
+            <h5 class="column-meta-heading">Data Pipeline Engine</h5>
+            <ul class="metadata-unordered-list">
+                <li>Open-Meteo API</li>
+                <li>Open Street Map</li>
+            </ul>
+        </div>
+
+        <div class="footer-meta-col">
+            <h5 class="column-meta-heading">Cartographic Layering</h5>
+            <ul class="metadata-unordered-list">
+                <li>Leaflet Engine v1.9.4</li>
+                <li>Weather Data API</li>
+            </ul>
+        </div>
+
+        <div class="footer-meta-col">
+            <h5 class="column-meta-heading">System Compliance</h5>
+            <ul class="metadata-unordered-list">
+                <li>Terms of Use & Fair Use Docs</li>
+                <li>Data Privacy Declaration</li>
+            </ul>
+        </div>
+
+        <div class="footer-meta-col">
+            <div class="brand-identity-header">
+                <i class="fa-solid fa-cloud-sun-rain platform-icon-brand" style="color: #2a7be4; font-size:15px;"></i>
+                <span class="brand-title-text">SkyPH Platform</span>
+            </div>
+            <div class="contact-details-list">
+                <p><i class="fa-solid fa-globe"></i> <a href="#" class="footer-anchor-link link-teal">skyph.pages.dev</a></p>
+                <p class="platform-description-paragraph">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Data-driven agro-climatic decision matrix providing real-time predictive analytical support.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="institutional-copyright-banner">
+        © 2026 SKY-PH SYSTEMS INC. ALL RIGHTS RESERVED.
+    </div>
+</footer>
+
+</main>
 
 <div id="profilePopup" class="modal-overlay">
     <div class="modal-content">

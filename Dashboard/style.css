@@ -146,11 +146,29 @@ body {
 
 .logo { margin-right: auto; }
 .logo img { height: 42px; object-fit: contain; }
-.user { display: flex; align-items: center; gap: 10px; font-weight: 600; color: #334155; }
-.user-icon { font-size: 1.7rem; color: #2a7be4; }
+
+.user { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px;                  
+    font-weight: 700; 
+    font-size: 15.5px;          
+    color: #2a7be4; 
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.user:hover {
+    transform: scale(1.02);     
+}
+
+.user-icon, .user .fa-circle-user { 
+    font-size: 2.1rem !important; 
+    color: #2a7be4 !important; 
+}
 
 /* =========================
-   WELCOME CONTAINER (CENTERED SEARCH EDITION)
+   WELCOME CONTAINER 
 ========================= */
 .welcome {
     position: relative;
@@ -164,13 +182,18 @@ body {
 }
 
 .welcome h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
-.welcome h2 span { color: #fff; font-weight: 700; }
+
+.welcome h2 span { 
+    color: #fbbf24; 
+    font-weight: 800; 
+}
+
 .welcome p { opacity: .95; line-height: 1.7; font-size: 14px; max-width: 800px; }
 
 .welcome-search {
     margin-top: 22px;
     display: flex;
-    justify-content: center; /* Aligns search components perfectly in the center horizontally */
+    justify-content: center;
     align-items: center;
     gap: 12px;
     width: 100%;
@@ -181,12 +204,20 @@ body {
     max-width: 500px;
     padding: 14px 20px;
     border-radius: 50px;
-    border: none;
+    border: 2px solid transparent; /* Keeps smooth sizing transition transitions */
     outline: none;
     background: rgba(255,255,255,0.95);
     font-size: 14px;
     color: #334155;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: all 0.3s ease-in-out;
+}
+
+/* NEW HOOK STYLE: Triggers dynamic vibrant red glowing profile */
+.welcome-search input.highlighted-glow {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.75) !important;
+    transform: scale(1.02);
 }
 
 .welcome-search button {
@@ -199,15 +230,14 @@ body {
     cursor: pointer;
     box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
-    flex-shrink: 0; /* Prevents the search button from shrinking or warping */
+    flex-shrink: 0;
 }
 
 .welcome-search button:hover { background: #eff6ff; transform: translateY(-1px); }
 
-
 /* ========================================================
    SPLIT FORECAST MODULE LAYOUT
-   ======================================================== */
+======================================================== */
 .forecast-container {
     display: block;
     width: 100%;
@@ -216,13 +246,20 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Splits left panel metrics from right panel forecast grids */
 .forecast-container.has-data {
     display: grid;
     grid-template-columns: 320px 1fr;
     gap: 25px;
+    align-items: start;
     background: transparent;
     animation: slideUp 0.4s ease-out;
+}
+
+.weather-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
 }
 
 @keyframes slideUp {
@@ -230,7 +267,6 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Empty Placeholder Design */
 .empty-placeholder {
     background: rgba(255,255,255,.7);
     backdrop-filter: blur(20px);
@@ -243,7 +279,6 @@ body {
     box-shadow: 0 15px 35px rgba(0,0,0,.04);
 }
 
-/* Left Side: Main Weather Card Panel */
 .weather-main-card {
     background: linear-gradient(135deg, #1e5fc4 0%, #1d4ed8 100%);
     border-radius: 28px;
@@ -286,7 +321,7 @@ body {
     font-size: 6.5rem;
     font-weight: 900;
     line-height: 0.9;
-    margin-vertical: 10px;
+    margin: 10px 0;
 }
 
 .condition-group h2 {
@@ -300,12 +335,10 @@ body {
     opacity: 0.85;
 }
 
-/* Left Side Bottom: 2x3 Extra Detailed System Metrics Grid */
 .details-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    margin-top: 15px;
 }
 
 .detail-item {
@@ -340,14 +373,12 @@ body {
     margin-top: 2px;
 }
 
-/* Right Side Dashboard Framework Wrapper */
 .weather-right {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* Horizontal 5-Day Forecast Tab Row Container */
 .forecast-tabs-wrapper {
     background: white;
     border-radius: 28px;
@@ -369,7 +400,6 @@ body {
     gap: 12px;
 }
 
-/* Individual Vertical Cards inside row layout */
 .tab-card {
     background: #f8fafc;
     flex: 1;
@@ -419,7 +449,6 @@ body {
     font-size: 15px;
 }
 
-/* Location Map Container Design Hook */
 .map-wrapper-layout {
     background: white;
     border-radius: 28px;
@@ -442,9 +471,9 @@ body {
     z-index: 1;
 }
 
-/* =========================
+/* ========================================================
    FEATURED EXPLORATION GRID
-========================= */
+======================================================== */
 .featured-section h3 {
     font-size: 1.4rem;
     font-weight: 800;
@@ -467,6 +496,8 @@ body {
     border: 1px solid rgba(255,255,255,0.4);
     box-shadow: 0 10px 25px rgba(0,0,0,0.03);
     transition: all .3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover { 
@@ -474,28 +505,60 @@ body {
     box-shadow: 0 18px 35px rgba(42,123,228,.12); 
 }
 
-.card img { width: 100%; height: 160px; object-fit: cover; }
-.card-body { padding: 20px; }
-.card-body h4 { margin-bottom: 8px; font-size: 1.05rem; color: #0f172a; font-weight: 700; }
-.card-body p { font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 8px;}
-.card-body p i.fa-location-dot { color: #ef4444; margin-right: 4px; }
+.card img { 
+    width: 100%; 
+    height: 160px; 
+    object-fit: cover; 
+}
+
+.card-body { 
+    padding: 20px; 
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-body h4 { 
+    margin-bottom: 8px; 
+    font-size: 1.05rem; 
+    color: #0f172a; 
+    font-weight: 700; 
+}
+
+.card-body p { 
+    font-size: 13px; 
+    color: #64748b; 
+    line-height: 1.6; 
+    margin-bottom: 12px;
+}
+
+.card-body p i.fa-location-dot { 
+    color: #ef4444; 
+    margin-right: 4px; 
+}
 
 .viewForecastBtn {
-    margin-top: 10px;
+    margin-top: auto; 
     background: linear-gradient(135deg, #2a7be4, #1e5fc4);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 20px;
     border-radius: 12px;
     cursor: pointer;
     font-size: 13px;
     font-weight: 600;
     transition: all 0.2s;
+    align-self: flex-start; 
+}
+
+.viewForecastBtn:hover {
+    opacity: 0.95;
+    box-shadow: 0 4px 12px rgba(42,123,228,0.3);
 }
 
 /* ========================================================
    THE SKYPH PLATFORM METADATA FOOTER 
-   ======================================================== */
+======================================================== */
 .sky-ph-footer {
     margin-top: auto;
     width: 100%;
