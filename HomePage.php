@@ -93,17 +93,26 @@ nav a:hover::after {
     left: 0;
 }
 
+.login-btn,
+.btn,
+.modal-login-btn,
+.modal-register-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
 .login-btn {
     padding: 10px 25px;
     background: linear-gradient(135deg, #2a7be4, #1e5fc4);
     color: white;
-    border: none;
     border-radius: 25px;
-    text-decoration: none;
-    display: inline-block;
     font-weight: 600;
     box-shadow: 0 4px 15px rgba(42, 123, 228, 0.4);
-    transition: all 0.3s ease;
 }
 
 .login-btn:hover {
@@ -171,14 +180,9 @@ nav a:hover::after {
     margin-right: 15px;
     cursor: pointer;
     text-decoration: none;
-    display: inline-block;
-    font-weight: 600;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-.btn.white {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     background: rgba(255, 255, 255, 0.95);
     color: #2a7be4;
     backdrop-filter: blur(10px);
@@ -555,27 +559,24 @@ footer {
     box-sizing: border-box;
 }
 
-.modal-input-group input:focus {
-    border-color: #2a7be4;
-    box-shadow: 0 0 0 3px rgba(42, 123, 228, 0.1);
-    transform: translateY(-2px);
-    background: #fff;
-}
+    input[name="first_name"], input[name="middle_name"], input[name="last_name"] {
+        text-transform: capitalize;
+    }
 
-.modal-login-btn,
-.modal-register-btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #2a7be4, #1e5fc4);
-    color: white;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(42, 123, 228, 0.3);
-}
+    .modal-login-btn,
+    .modal-register-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2a7be4, #1e5fc4);
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(42, 123, 228, 0.3);
+    }
 
 .modal-login-btn:hover,
 .modal-register-btn:hover {
@@ -948,8 +949,31 @@ footer {
         });
     });
 
+    function capitalizeNameInput(value) {
+        return value.replace(/(^|\s)\S/g, char => char.toUpperCase());
+    }
+
+    function normalizeNameField(input) {
+        const cursorStart = input.selectionStart;
+        const cursorEnd = input.selectionEnd;
+        const normalized = capitalizeNameInput(input.value);
+        if (input.value !== normalized) {
+            input.value = normalized;
+            if (typeof cursorStart === 'number' && typeof cursorEnd === 'number') {
+                input.setSelectionRange(cursorStart, cursorEnd);
+            }
+        }
+    }
+
+    const registerNameInputs = document.querySelectorAll('input[name="first_name"], input[name="middle_name"], input[name="last_name"]');
+    registerNameInputs.forEach(input => {
+        input.addEventListener('input', () => normalizeNameField(input));
+        input.addEventListener('blur', () => normalizeNameField(input));
+    });
+
     document.getElementById('registerForm').addEventListener('submit', function(event) {
         event.preventDefault();
+        registerNameInputs.forEach(normalizeNameField);
         var firstName = this.first_name.value.trim();
         var lastName = this.last_name.value.trim();
         var email = this.email.value.trim();
